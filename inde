@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Stopwatch</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;1,300&display=swap" rel="stylesheet" />
+  <style>
+    body{
+  background-color:#2c3347;
+  color:#fff;
+}
+h1{
+  font-size:48px;
+  font-family: "Montserrat",sans-serif;
+  font-weight:200;
+  text-align:center;
+  padding: 0 60px;
+  margin:0;
+}
+.stopwatch{
+  display:grid;
+  justify-items:center;
+  grid-row-gap:25px;
+  width:100%;
+  padding-top:25px;
+}
+.circle{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:400px;
+  width:400px;
+  border-radius:50%;
+  border:2px solid;
+}
+
+.time{
+      font-family: "Roboto Mono",monospace;
+  font-size:48px;
+  font-weight:300;
+}
+.controls{
+  display:flex;
+  justify-content:space-between;
+  width:200px;
+}
+button{
+  cursor:pointer;
+  background:transparent;
+  outline:none;
+  border:none;
+  padding:0;
+  margin:0;
+}
+#playButton{
+  display:block;
+  width:70px;
+   height:70px;
+}
+#pauseButton{
+  display:none;
+  width:70px;
+   height:70px;
+}
+#resetButton{
+  width:70px;
+   height:70px;
+}
+  </style>
+</head>
+
+<body>
+  <div class="stopwatch">
+    <h1>STOPWATCH</h1>
+    <div class="circle">
+      <span class="time" id="display">00:00:00:000</span>
+    </div>
+    <div class="controls">
+      <button class="buttonPlay">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIHD1yWSNUnrMDZhbvvSGefrqFjowAQ7xZTn7ZI_CX&s"alt="" id="playButton">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSLAWrfs9xKDqIw8QWp5BbP3Ui92Q55G8i625rVGQnxRg&s" alt="" id="pauseButton">
+      </button>
+      <button class="buttonReset">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQviPiWffqttj2jDGi7egYuUU4S8kMIuqbOVg&usqp=CAU" alt="" id="resetButton">
+      </button>
+    </div>
+  </div>
+  <script>
+    const stopwatch = document.getElementById("display");
+
+const playButton = document.getElementById("playButton");
+const pauseButton = document.getElementById("pauseButton");
+const resetButton = document.getElementById("resetButton");
+
+let startTime;
+let elapsedTime = 0;
+let stopWatchInterval;
+
+playButton.addEventListener("click", startStopwatch);
+pauseButton.addEventListener("click", stopStopwatch);
+resetButton.addEventListener("click", resetStopwatch);
+
+function startStopwatch(){
+  startTime = Date.now() - elapsedTime;
+
+  stopWatchInterval = setInterval(function printTime(){
+    elapsedTime = Date.now() - startTime;
+    timeToString(elapsedTime);
+    showButton("PAUSE");
+  })
+}
+
+function timeToString(time){
+  let diffInHrs = time/(3600000);
+  let hh = Math.floor(diffInHrs);
+
+  let diffInMin = (diffInHrs-hh)*60;
+  let mm = Math.floor(diffInMin);
+
+  let diffInSec = (diffInMin-mm)*60;
+  let ss = Math.floor(diffInSec);
+
+  let diffInMs = (diffInSec-ss)*1000;
+  let ms = Math.floor(diffInMs);
+
+  let formattedHH = hh.toString().padStart(2, "0");
+  let formattedMM = mm.toString().padStart(2, "0");
+  let formattedSS = ss.toString().padStart(2, "0");
+  let formattedMS = ms.toString().padStart(3, "0");
+
+  stopwatch.innerHTML = `${formattedHH}:${formattedMM}:${formattedSS}:${formattedMS}`;
+
+}
+
+function stopStopwatch(){
+  clearInterval(stopWatchInterval);
+  showButton("PLAY");
+}
+
+function resetStopwatch(){
+  clearInterval(stopWatchInterval);
+  showButton("PLAY");
+  stopwatch.innerHTML = '00:00:00:000';
+  elapsedTime = 0;
+
+}
+function showButton(buttonKey){
+  if(buttonKey==="PLAY"){
+    playButton.style.display="block";
+    pauseButton.style.display="none";
+  }
+  else{
+    playButton.style.display="none";
+    pauseButton.style.display="block";
+  }
+}
+  </script>
+</body>
+
+</html>
